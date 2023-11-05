@@ -1,11 +1,17 @@
 package main
 
 import (
-	"go-linter/pkg/namingconventions"
+	"go-linter/pkg/functionnaming"
+	"go-linter/pkg/packagenaming"
+	"go-linter/pkg/variablenaming"
 
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"golang.org/x/tools/go/analysis/multichecker"
 )
 
 func main() {
-	singlechecker.Main(namingconventions.Analyzer)
+	multichecker.Main(
+		functionnaming.Analyzer,
+		variablenaming.Analyzer,
+		packagenaming.Analyzer,
+	)
 }
