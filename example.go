@@ -1,7 +1,11 @@
-package Main
+package main
 
 import (
 	"fmt"
+)
+
+const (
+	my_constant = "hello"
 )
 
 var (
@@ -13,10 +17,15 @@ func bad_function_name() {
 }
 
 func badVariableNaming() {
+	const BADCONST = "hello"
 	var var_decl_bad_naming string
 	var_decl_bad_naming = "hello"
 	fmt.Println(var_decl_bad_naming)
 
 	var_assignment_bad_naming := "test"
 	fmt.Print(var_assignment_bad_naming)
+}
+
+func tooManyParams(a, b, c, d, e string) {
+	fmt.Print(a, b, c, d, e)
 }

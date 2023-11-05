@@ -19,22 +19,25 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		switch decl := node.(type) {
 		// Check for variable declarations (e.g. var exampleVariable string)
 		case *ast.GenDecl:
-			if decl.Tok == token.VAR {
-				for _, spec := range decl.Specs {
-					valSpec, ok := spec.(*ast.ValueSpec)
-					if !ok {
-						continue
-					}
-					for _, ident := range valSpec.Names {
-						varName := ident.Name
+			// If declaration is not a variable then skip checking logic
+			if decl.Tok != token.VAR {
+				return true
+			}
 
-						result, reason := isValidVariableName(varName)
-						if !result {
-							pass.Reportf(
-								ident.Pos(),
-								"Variable %s in variable declaration does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
-								varName, reason, "exampleVariableName")
-						}
+			for _, spec := range decl.Specs {
+				valSpec, ok := spec.(*ast.ValueSpec)
+				if !ok {
+					continue
+				}
+				for _, ident := range valSpec.Names {
+					varName := ident.Name
+
+					result, reason := isValidVariableName(varName)
+					if !result {
+						pass.Reportf(
+							ident.Pos(),
+							"Variable %q in variable declaration does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
+							varName, reason, "exampleVariableName")
 					}
 				}
 			}
@@ -49,7 +52,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if !result {
 						pass.Reportf(
 							ident.Pos(),
-							"Variable %s in variable assignment does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
+							"Variable %q in variable assignment does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
 							varName, reason, "exampleVariableName")
 					}
 				}

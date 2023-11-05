@@ -16,18 +16,20 @@ var Analyzer = &analysis.Analyzer{
 
 func run(pass *analysis.Pass) (interface{}, error) {
 	inspect := func(node ast.Node) bool {
-		switch node := node.(type) {
-		case *ast.File:
-			packageName := node.Name.Name
+		file, ok := node.(*ast.File)
+		if !ok {
+			return true
+		}
 
-			result, reason := isValidPackageName(packageName)
-			if !result {
-				pass.Reportf(
-					node.Package,
-					"Package name %q does not follow Go's naming conventions as it contains an %s. Package names should be short and only contain lowercase letters.",
-					packageName, reason,
-				)
-			}
+		packageName := file.Name.String()
+
+		result, reason := isValidPackageName(packageName)
+		if !result {
+			pass.Reportf(
+				file.Package,
+				"Package name %q does not follow Go's naming conventions as it contains an %s. Package names should be short and only contain lowercase letters.",
+				packageName, reason,
+			)
 		}
 
 		return true
@@ -50,6 +52,6 @@ func isValidPackageName(packageName string) (bool, string) {
 			return false, "uppercase letter"
 		}
 	}
-	
+
 	return true, ""
 }

@@ -27,7 +27,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !result {
 			pass.Reportf(
 				node.Pos(),
-				"Function %s does not follow Go's naming conventions as it contains %s. Instead use Camel Case, for example %q for private functions or %q for public functions.",
+				"Function %q does not follow Go's naming conventions as it contains %s. Instead use Camel Case, for example %q for private functions or %q for public functions.",
 				funcName, reason, "examplePrivateFunctionName", "ExamplePrivateFunctionName")
 		}
 
