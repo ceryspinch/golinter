@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-linter/pkg/constantnaming"
+	"go-linter/pkg/functionlength"
 	"go-linter/pkg/functionnaming"
 	"go-linter/pkg/packagenaming"
 	"go-linter/pkg/parameterlist"
@@ -17,5 +18,6 @@ func main() {
 		packagenaming.Analyzer,
 		constantnaming.Analyzer,
 		parameterlist.Analyzer,
+		functionlength.Analyzer,
 	)
 }

@@ -29,3 +29,17 @@ func badVariableNaming() {
 func tooManyParams(a, b, c, d, e string) {
 	fmt.Print(a, b, c, d, e)
 }
+
+func longFunction() {
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+	fmt.Print(1)
+}
