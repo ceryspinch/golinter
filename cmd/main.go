@@ -4,6 +4,7 @@ import (
 	"go-linter/pkg/constantnaming"
 	"go-linter/pkg/functionlength"
 	"go-linter/pkg/functionnaming"
+	"go-linter/pkg/magicnumbers"
 	"go-linter/pkg/packagenaming"
 	"go-linter/pkg/parameterlist"
 	"go-linter/pkg/repeatedstrings"
@@ -21,5 +22,6 @@ func main() {
 		parameterlist.Analyzer,
 		functionlength.Analyzer,
 		repeatedstrings.Analyzer,
+		magicnumbers.Analyzer,
 	)
 }
