@@ -44,8 +44,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				if !isValid {
 					pass.Reportf(
 						ident.Pos(),
-						"Constant %q does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
-						constName, reason, "exampleConstantName")
+						"Constant %q does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example: exampleConstantName.",
+						constName, reason)
 				}
 			}
 		}
