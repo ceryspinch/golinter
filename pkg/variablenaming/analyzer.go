@@ -10,10 +10,6 @@ import (
 	"golang.org/x/tools/go/ast/inspector"
 )
 
-const (
-	reportMsg = "Variable %q in variable declaration does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q."
-)
-
 var Analyzer = &analysis.Analyzer{
 	Name:     "variablenaming",
 	Doc:      "Checks for deviations from Go's naming conventions in variable names",
@@ -26,7 +22,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 	nodeFilter := []ast.Node{
 		(*ast.GenDecl)(nil),
-		(*ast.FuncDecl)(nil),
+		(*ast.AssignStmt)(nil),
 	}
 
 	inspector.Preorder(nodeFilter, func(node ast.Node) {
@@ -49,7 +45,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							reportMsg,
+							"Variable %q in variable declaration does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
 							varName, reason, "exampleVariableName")
 					}
 				}
@@ -65,7 +61,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							reportMsg,
+							"Variable %q in variable assignment does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
 							varName, reason, "exampleVariableName")
 					}
 				}
