@@ -5,38 +5,36 @@ import (
 	"strings"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "functionnaming",
-	Doc:  "Checks for deviations from Go's naming conventions in function names",
-	Run:  run,
+	Name:     "functionnaming",
+	Doc:      "Checks for deviations from Go's naming conventions in function names",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
-		funcDecl, ok := node.(*ast.FuncDecl)
-		if !ok {
-			return true
-		}
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
+	nodeFilter := []ast.Node{
+		(*ast.FuncDecl)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
+		funcDecl := node.(*ast.FuncDecl)
 		funcName := funcDecl.Name.String()
 
-		result, reason := isValidFunctionName(funcName)
-		// Check if function name contains underscores
-		if !result {
+		isValid, reason := isValidFunctionName(funcName)
+		if !isValid {
 			pass.Reportf(
 				node.Pos(),
 				"Function %q does not follow Go's naming conventions as it contains %s. Instead use Camel Case, for example %q for private functions or %q for public functions.",
 				funcName, reason, "examplePrivateFunctionName", "ExamplePrivateFunctionName")
 		}
-
-		return true
-	}
-
-	for _, fileAST := range pass.Files {
-		ast.Inspect(fileAST, inspect)
-	}
+	})
 
 	return nil, nil
 }

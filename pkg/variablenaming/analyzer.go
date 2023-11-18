@@ -6,22 +6,35 @@ import (
 	"strings"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
+)
+
+const (
+	reportMsg = "Variable %q in variable declaration does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q."
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "variablenaming",
-	Doc:  "Checks for deviations from Go's naming conventions in variable names",
-	Run:  run,
+	Name:     "variablenaming",
+	Doc:      "Checks for deviations from Go's naming conventions in variable names",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+
+	nodeFilter := []ast.Node{
+		(*ast.GenDecl)(nil),
+		(*ast.FuncDecl)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
 		switch decl := node.(type) {
 		// Check for variable declarations (e.g. var exampleVariable string)
 		case *ast.GenDecl:
-			// If declaration is not a variable then skip checking logic
 			if decl.Tok != token.VAR {
-				return true
+				return
 			}
 
 			for _, spec := range decl.Specs {
@@ -32,11 +45,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				for _, ident := range valSpec.Names {
 					varName := ident.Name
 
-					result, reason := isValidVariableName(varName)
-					if !result {
+					isValid, reason := isValidVariableName(varName)
+					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							"Variable %q in variable declaration does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
+							reportMsg,
 							varName, reason, "exampleVariableName")
 					}
 				}
@@ -48,23 +61,17 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				if ident, ok := varDecl.(*ast.Ident); ok {
 					varName := ident.Name
 
-					result, reason := isValidVariableName(varName)
-					if !result {
+					isValid, reason := isValidVariableName(varName)
+					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							"Variable %q in variable assignment does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
+							reportMsg,
 							varName, reason, "exampleVariableName")
 					}
 				}
 			}
 		}
-
-		return true
-	}
-
-	for _, fileAST := range pass.Files {
-		ast.Inspect(fileAST, inspect)
-	}
+	})
 
 	return nil, nil
 }

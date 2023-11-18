@@ -6,25 +6,30 @@ import (
 	"unicode"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "packagenaming",
-	Doc:  "Checks for deviations from Go's naming conventions in package names",
-	Run:  run,
+	Name:     "packagenaming",
+	Doc:      "Checks for deviations from Go's naming conventions in package names",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
-		file, ok := node.(*ast.File)
-		if !ok {
-			return true
-		}
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
+	nodeFilter := []ast.Node{
+		(*ast.File)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
+		file := node.(*ast.File)
 		packageName := file.Name.String()
 
-		result, reason := isValidPackageName(packageName)
-		if !result {
+		isValid, reason := isValidPackageName(packageName)
+		if !isValid {
 			pass.Reportf(
 				file.Package,
 				"Package name %q does not follow Go's naming conventions as it contains an %s. Package names should be short and only contain lowercase letters.",
@@ -32,12 +37,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			)
 		}
 
-		return true
-	}
-
-	for _, fileAST := range pass.Files {
-		ast.Inspect(fileAST, inspect)
-	}
+	})
 
 	return nil, nil
 }

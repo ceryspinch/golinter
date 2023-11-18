@@ -6,22 +6,33 @@ import (
 	"strings"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "constantnaming",
-	Doc:  "Checks for deviations from Go's naming conventions in constant names",
-	Run:  run,
+	Name:     "constantnaming",
+	Doc:      "Checks for deviations from Go's naming conventions in constant names",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
-		decl, ok := node.(*ast.GenDecl)
-		if !ok || decl.Tok != token.CONST {
-			return true
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+
+	nodeFilter := []ast.Node{
+		(*ast.GenDecl)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
+		genDecl := node.(*ast.GenDecl)
+
+		// Skip if not a constant declaration
+		if genDecl.Tok != token.CONST {
+			return
 		}
 
-		for _, spec := range decl.Specs {
+		for _, spec := range genDecl.Specs {
 			valSpec, ok := spec.(*ast.ValueSpec)
 			if !ok {
 				continue
@@ -29,22 +40,16 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			for _, ident := range valSpec.Names {
 				constName := ident.Name
 
-				result, reason := isValidConstantName(constName)
-				if !result {
+				isValid, reason := isValidConstantName(constName)
+				if !isValid {
 					pass.Reportf(
 						ident.Pos(),
-						"Constant %q does not follow Go's naming conventions as it %s. Instead use CamelCase, for example %q.",
+						"Constant %q does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
 						constName, reason, "exampleConstantName")
 				}
 			}
 		}
-
-		return true
-	}
-
-	for _, fileAST := range pass.Files {
-		ast.Inspect(fileAST, inspect)
-	}
+	})
 
 	return nil, nil
 }

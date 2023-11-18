@@ -4,20 +4,26 @@ import (
 	"go/ast"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "longparameterlist",
-	Doc:  "Checks for unusually long parameter lists that may suggest a function is doing too many things",
-	Run:  run,
+	Name:     "longparameterlist",
+	Doc:      "Checks for unusually long parameter lists that may suggest a function is doing too many things",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
-		funcDecl, ok := node.(*ast.FuncDecl)
-		if !ok {
-			return true
-		}
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+
+	nodeFilter := []ast.Node{
+		(*ast.FuncDecl)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
+		funcDecl := node.(*ast.FuncDecl)
 
 		paramList := funcDecl.Type.Params
 		if paramList.NumFields() >= 5 {
@@ -28,12 +34,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			)
 		}
 
-		return true
-	}
-
-	for _, fileAST := range pass.Files {
-		ast.Inspect(fileAST, inspect)
-	}
+	})
 
 	return nil, nil
 }
