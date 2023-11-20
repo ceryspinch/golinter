@@ -1,7 +1,7 @@
 package constantnaming_test
 
 import (
-	"go-linter/pkg/constantnaming"
+	"github.com/ceryspinch/go-linter/pkg/constantnaming"
 	"os"
 	"path/filepath"
 	"testing"

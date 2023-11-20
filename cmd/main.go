@@ -1,14 +1,14 @@
 package main
 
 import (
-	"go-linter/pkg/constantnaming"
-	"go-linter/pkg/functionlength"
-	"go-linter/pkg/functionnaming"
-	"go-linter/pkg/magicnumbers"
-	"go-linter/pkg/packagenaming"
-	"go-linter/pkg/parameterlist"
-	"go-linter/pkg/repeatedstrings"
-	"go-linter/pkg/variablenaming"
+	"github.com/ceryspinch/go-linter/pkg/constantnaming"
+	"github.com/ceryspinch/go-linter/pkg/functionlength"
+	"github.com/ceryspinch/go-linter/pkg/functionnaming"
+	"github.com/ceryspinch/go-linter/pkg/magicnumbers"
+	"github.com/ceryspinch/go-linter/pkg/packagenaming"
+	"github.com/ceryspinch/go-linter/pkg/parameterlist"
+	"github.com/ceryspinch/go-linter/pkg/repeatedstrings"
+	"github.com/ceryspinch/go-linter/pkg/variablenaming"
 
 	"golang.org/x/tools/go/analysis/multichecker"
 )

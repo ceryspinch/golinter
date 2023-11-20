@@ -1,4 +1,4 @@
-module go-linter
+module github.com/ceryspinch/go-linter
 
 go 1.21
 

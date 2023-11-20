@@ -1,7 +1,7 @@
-package parameterlist_test
+package functionnaming_test
 
 import (
-	"github.com/ceryspinch/go-linter/pkg/parameterlist"
+	"github.com/ceryspinch/go-linter/pkg/functionnaming"
 	"os"
 	"path/filepath"
 	"testing"
@@ -16,5 +16,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, parameterlist.Analyzer, "parameterlist")
+	analysistest.Run(t, testdata, functionnaming.Analyzer, "functionnaming")
 }

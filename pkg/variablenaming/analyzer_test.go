@@ -1,7 +1,7 @@
 package variablenaming_test
 
 import (
-	"go-linter/pkg/variablenaming"
+	"github.com/ceryspinch/go-linter/pkg/variablenaming"
 	"os"
 	"path/filepath"
 	"testing"

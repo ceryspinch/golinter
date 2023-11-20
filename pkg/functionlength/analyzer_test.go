@@ -1,7 +1,7 @@
 package functionlength_test
 
 import (
-	"go-linter/pkg/functionlength"
+	"github.com/ceryspinch/go-linter/pkg/functionlength"
 	"os"
 	"path/filepath"
 	"testing"
