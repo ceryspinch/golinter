@@ -9,7 +9,6 @@ import (
 	"github.com/ceryspinch/go-linter/pkg/parameterlist"
 	"github.com/ceryspinch/go-linter/pkg/repeatedstrings"
 	"github.com/ceryspinch/go-linter/pkg/variablenaming"
-
 	"golang.org/x/tools/go/analysis/multichecker"
 )
 

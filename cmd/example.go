@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 const (
-	my_constant = "hello"
+	my_constant = "test"
 )
 
 func helloWorld() {
@@ -15,9 +15,9 @@ func helloWorld() {
 // 	bad_var_name = "hello"
 // )
 
-// func bad_function_name() {
-// 	fmt.Println("Hello World")
-// }
+func bad_function_name() {
+	fmt.Println("Hello World")
+}
 
 // func badVariableNaming() {
 // 	const BADCONST = "hello"

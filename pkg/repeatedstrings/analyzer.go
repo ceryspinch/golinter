@@ -35,18 +35,18 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		// Get string value and add to the map as a key
 		stringValue := basicLit.Value
 		stringLiterals[stringValue]++
-
-		for str, count := range stringLiterals {
-			if count > 1 {
-				pass.Reportf(
-					pass.Files[0].Pos(),
-					"String literal %s is repeated %d times. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.",
-					str,
-					count,
-				)
-			}
-		}
 	})
+
+	for str, count := range stringLiterals {
+		if count > 1 {
+			pass.Reportf(
+				pass.Files[0].Pos(),
+				"String literal %s is repeated %d times. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.",
+				str,
+				count,
+			)
+		}
+	}
 
 	return nil, nil
 }
