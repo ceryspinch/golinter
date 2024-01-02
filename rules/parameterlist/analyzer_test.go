@@ -1,11 +1,12 @@
-package magicnumbers_test
+package parameterlist_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/ceryspinch/go-linter/pkg/magicnumbers"
+	"github.com/ceryspinch/golinter/rules/parameterlist"
+
 	"golang.org/x/tools/go/analysis/analysistest"
 )
 
@@ -16,5 +17,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, magicnumbers.Analyzer, "magicnumbers")
+	analysistest.Run(t, testdata, parameterlist.Analyzer, "parameterlist")
 }

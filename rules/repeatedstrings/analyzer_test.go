@@ -1,10 +1,11 @@
-package constantnaming_test
+package repeatedstrings_test
 
 import (
-	"github.com/ceryspinch/go-linter/pkg/constantnaming"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/ceryspinch/golinter/rules/repeatedstrings"
 
 	"golang.org/x/tools/go/analysis/analysistest"
 )
@@ -16,5 +17,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, constantnaming.Analyzer, "constantnaming")
+	analysistest.Run(t, testdata, repeatedstrings.Analyzer, "repeatedstrings")
 }

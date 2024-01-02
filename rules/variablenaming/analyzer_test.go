@@ -1,11 +1,11 @@
-package packagenaming_test
+package variablenaming_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/ceryspinch/go-linter/pkg/packagenaming"
+	"github.com/ceryspinch/golinter/rules/variablenaming"
 
 	"golang.org/x/tools/go/analysis/analysistest"
 )
@@ -17,5 +17,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, packagenaming.Analyzer, "packagenaming")
+	analysistest.Run(t, testdata, variablenaming.Analyzer, "variablenaming")
 }

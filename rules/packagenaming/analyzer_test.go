@@ -1,10 +1,11 @@
-package functionlength_test
+package packagenaming_test
 
 import (
-	"github.com/ceryspinch/go-linter/pkg/functionlength"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/ceryspinch/golinter/rules/packagenaming"
 
 	"golang.org/x/tools/go/analysis/analysistest"
 )
@@ -16,5 +17,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, functionlength.Analyzer, "functionlength")
+	analysistest.Run(t, testdata, packagenaming.Analyzer, "packagenaming")
 }

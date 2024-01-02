@@ -1,10 +1,11 @@
 package functionnaming_test
 
 import (
-	"github.com/ceryspinch/go-linter/pkg/functionnaming"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/ceryspinch/golinter/rules/functionnaming"
 
 	"golang.org/x/tools/go/analysis/analysistest"
 )
