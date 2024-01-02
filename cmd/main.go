@@ -13,6 +13,10 @@ import (
 )
 
 func main() {
+	RunLinter()
+}
+
+func RunLinter() {
 	multichecker.Main(
 		functionnaming.Analyzer,
 		variablenaming.Analyzer,
