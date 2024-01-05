@@ -1,16 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const (
-	myage = 22
+	my_age = 22
 )
 
 var (
 	greeting_message = "hello"
 )
 
-func helloWorld() {
+func hello_world() {
 	fmt.Println("Hello World")
 	fmt.Println("Hello World")
 }
@@ -39,4 +41,12 @@ func countToTen() {
 	fmt.Print(8)
 	fmt.Print(9)
 	fmt.Print(10)
+}
+
+func complexConditional() {
+	x := 5
+	if x == 0 || x == 1 || x == 2 || x == 3 {
+		fmt.Println("yes")
+	}
+	fmt.Println("no")
 }

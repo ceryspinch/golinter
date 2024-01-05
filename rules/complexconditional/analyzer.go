@@ -3,6 +3,7 @@ package complexconditional
 import (
 	"go/ast"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -30,7 +31,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if complexity > 3 {
 			pass.Reportf(
 				ifStmt.Pos(),
-				"Complex if statement condition detected with %d boolean expressions. This can make the code difficult to read and maintain. Consider refactoring by moving these long conditional checks into separate functions to be called.", complexity)
+				(color.RedString("Complex if statement condition detected with %d boolean expressions. ", complexity))+
+					color.BlueString("This can make the code difficult to read and maintain. ")+
+					color.GreenString("Consider refactoring by moving these long conditional checks into separate functions to be called."),
+			)
 		}
 	})
 

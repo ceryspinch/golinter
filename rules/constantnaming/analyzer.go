@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"strings"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -44,8 +45,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				if !isValid {
 					pass.Reportf(
 						ident.Pos(),
-						"Constant %q does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example: exampleConstantName.",
-						constName, reason)
+						(color.RedString("Constant %q does not follow Go's naming conventions ", constName))+
+							color.BlueString("as it contains %s. ", reason)+
+							color.GreenString("Instead use CamelCase, for example: exampleConstantName."),
+					)
 				}
 			}
 		}

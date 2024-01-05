@@ -5,6 +5,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -32,8 +33,9 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !isValid {
 			pass.Reportf(
 				file.Package,
-				"Package name %q does not follow Go's naming conventions as it contains an %s. Package names should be short and only contain lowercase letters.",
-				packageName, reason,
+				(color.RedString("Package name %q does not follow Go's naming conventions ", packageName))+
+					color.BlueString("as it contains an %s. ", reason)+
+					color.GreenString("Package names should be short and only contain lowercase letters."),
 			)
 		}
 

@@ -3,6 +3,7 @@ package functionlength
 import (
 	"go/ast"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -34,9 +35,9 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if numLines >= 10 {
 			pass.Reportf(
 				node.Pos(),
-				"Function %q is %d lines long, which may suggest that the function is doing more than one thing or is too complex which can affect readability and maintainability. Consider refactoring it into different, smaller functions that only do one thing each.",
-				funcDecl.Name.String(),
-				numLines,
+				(color.RedString("Function %q is %d lines long, ", funcDecl.Name.String(), numLines))+
+					color.BlueString("which may suggest that the function is doing more than one thing or is too complex and could be difficult to read, maintain and test. ")+
+					color.GreenString("Try to split the function up into smaller ones that do one thing each."),
 			)
 		}
 	})

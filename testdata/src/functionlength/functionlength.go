@@ -2,7 +2,7 @@ package functionlength
 
 import "fmt"
 
-func longFunction() { // want "Function \"longFunction\" is 14 lines long, which may suggest that the function is doing more than one thing or is too complex which can affect readability and maintainability. Consider refactoring it into different, smaller functions that only do one thing each."
+func longFunction() { // want "Function \"longFunction\" is 14 lines long, which may suggest that the function is doing more than one thing or is too complex and could be difficult to read, maintain and test. Try to split the function up into smaller ones that do one thing each."
 	fmt.Println(1)
 	fmt.Println(2)
 	fmt.Println(3)

@@ -3,6 +3,7 @@ package parameterlist
 import (
 	"go/ast"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -29,8 +30,9 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if paramList.NumFields() >= 5 {
 			pass.Reportf(
 				node.Pos(),
-				"Function %q has five or more parameters, which may suggest that the function is doing more than one thing and could be difficult to read, maintain and test. Try to split the function up into smaller ones that do one thing each.",
-				funcDecl.Name.String(),
+				(color.RedString("Function %q has five or more parameters, ", funcDecl.Name.String()))+
+					color.BlueString("which may suggest that the function is doing more than one thing or is too complex and could be difficult to read, maintain and test. ")+
+					color.GreenString("Try to split the function up into smaller ones that do one thing each."),
 			)
 		}
 

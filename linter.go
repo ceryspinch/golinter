@@ -1,6 +1,7 @@
 package golinter
 
 import (
+	"github.com/ceryspinch/golinter/rules/complexconditional"
 	"github.com/ceryspinch/golinter/rules/constantnaming"
 	"github.com/ceryspinch/golinter/rules/functionlength"
 	"github.com/ceryspinch/golinter/rules/functionnaming"
@@ -22,5 +23,6 @@ func RunLinter() {
 		functionlength.Analyzer,
 		repeatedstrings.Analyzer,
 		magicnumbers.Analyzer,
+		complexconditional.Analyzer,
 	)
 }

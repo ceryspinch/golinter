@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -28,12 +29,13 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if expr.Kind != token.INT {
 			return
 		}
-		
+
 		value := expr.Value
 		pass.Reportf(
 			node.Pos(),
-			"Possible magic number detected: %s. This can make the code difficult to understand and could lead to errors during maintenance. Consider defining it as a constant instead.",
-			value,
+			(color.RedString("Possible magic number detected: %s. ", value))+
+				color.BlueString("This can make the code difficult to understand and could lead to errors during maintenance. ")+
+				color.GreenString("Consider defining it as a constant instead."),
 		)
 	})
 

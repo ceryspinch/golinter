@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"strings"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -31,8 +32,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !isValid {
 			pass.Reportf(
 				node.Pos(),
-				"Function %q does not follow Go's naming conventions as it contains %s. Instead use Camel Case, for example %q for private functions or %q for public functions.",
-				funcName, reason, "examplePrivateFunctionName", "ExamplePrivateFunctionName")
+				(color.RedString("Function %q does not follow Go's naming conventions ", funcName))+
+					color.BlueString("as it contains %s. ", reason)+
+					color.GreenString("Instead use Camel Case, for example %q for private functions or %q for public functions.", "examplePrivateFunctionName", "ExamplePrivateFunctionName"),
+			)
 		}
 	})
 

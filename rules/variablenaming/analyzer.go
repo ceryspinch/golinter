@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"strings"
 
+	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -45,8 +46,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							"Variable %q in variable declaration does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
-							varName, reason, "exampleVariableName")
+							(color.RedString("Variable %q in variable declaration does not follow Go's naming conventions ", varName))+
+								color.BlueString("as it contains %s. ", reason)+
+								color.GreenString("Instead use CamelCase, for example %q.", "exampleVariableName"),
+						)
 					}
 				}
 			}
@@ -61,8 +64,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if !isValid {
 						pass.Reportf(
 							ident.Pos(),
-							"Variable %q in variable assignment does not follow Go's naming conventions as it contains %s. Instead use CamelCase, for example %q.",
-							varName, reason, "exampleVariableName")
+							(color.RedString("Variable %q in variable assignment does not follow Go's naming conventions ", varName))+
+								color.BlueString("as it contains %s. ", reason)+
+								color.GreenString("Instead use CamelCase, for example %q.", "exampleVariableName"),
+						)
 					}
 				}
 			}
