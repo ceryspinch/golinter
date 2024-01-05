@@ -10,7 +10,7 @@ import (
 
 var Analyzer = &analysis.Analyzer{
 	Name:     "longfunction",
-	Doc:      "Checks for unusually long functions that may suggest it is too complex",
+	Doc:      "Checks for long functions that may suggest they are too complex",
 	Run:      run,
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
@@ -34,7 +34,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if numLines >= 10 {
 			pass.Reportf(
 				node.Pos(),
-				"Function %q is %d lines long, which may suggest that the function is doing more than one thing or is too complex. Consider refactoring it to improve readability and maintainability.",
+				"Function %q is %d lines long, which may suggest that the function is doing more than one thing or is too complex which can affect readability and maintainability. Consider refactoring it into different, smaller functions that only do one thing each.",
 				funcDecl.Name.String(),
 				numLines,
 			)

@@ -32,7 +32,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		value := expr.Value
 		pass.Reportf(
 			node.Pos(),
-			"Possible magic number detected: %s. Consider defining it as a constant instead to make the code more readable and maintainable.",
+			"Possible magic number detected: %s. This can make the code difficult to understand and could lead to errors during maintenance. Consider defining it as a constant instead.",
 			value,
 		)
 	})

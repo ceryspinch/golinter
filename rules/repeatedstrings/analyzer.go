@@ -41,7 +41,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if count > 1 {
 			pass.Reportf(
 				pass.Files[0].Pos(),
-				"String literal %s is repeated %d times. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.",
+				"String literal %s is repeated %d times, which may cause problems during maintenance. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.",
 				str,
 				count,
 			)

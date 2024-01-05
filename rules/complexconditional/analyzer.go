@@ -10,7 +10,7 @@ import (
 
 var Analyzer = &analysis.Analyzer{
 	Name:     "complexconditional",
-	Doc:      "Checks for complex conditional if or switch statements",
+	Doc:      "Checks for complex conditional if statements",
 	Run:      run,
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
@@ -30,7 +30,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if complexity > 3 {
 			pass.Reportf(
 				ifStmt.Pos(),
-				"Complex if statement condition detected. Consider refactoring for better readability.")
+				"Complex if statement condition detected with %d boolean expressions. This can make the code difficult to read and maintain. Consider refactoring by moving these long conditional checks into separate functions to be called.", complexity)
 		}
 	})
 
@@ -42,7 +42,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if nestedIfCount > 1 {
 			pass.Reportf(
 				ifStmt.Pos(),
-				"Multiple nested if statements detected. Consider refactoring to improve readability.")
+				"Multiple, %d, nested if statements detected. This can make the code difficult to read, maintain and test. Consider refactoring by checking for invalid conditions first, simplifying conditions or using a switch statement instead.", nestedIfCount)
 		}
 	})
 

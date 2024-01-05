@@ -10,7 +10,7 @@ import (
 
 var Analyzer = &analysis.Analyzer{
 	Name:     "longparameterlist",
-	Doc:      "Checks for unusually long parameter lists that may suggest a function is doing too many things",
+	Doc:      "Checks for long parameter lists that may suggest a function is doing too many things",
 	Run:      run,
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
@@ -29,7 +29,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if paramList.NumFields() >= 5 {
 			pass.Reportf(
 				node.Pos(),
-				"Function %q has five or more parameters, which may suggest that the function is doing more than one thing. Try to split the function up into smaller ones that do one thing each, this makes the functions more readable, maintainable and testable.",
+				"Function %q has five or more parameters, which may suggest that the function is doing more than one thing and could be difficult to read, maintain and test. Try to split the function up into smaller ones that do one thing each.",
 				funcDecl.Name.String(),
 			)
 		}
