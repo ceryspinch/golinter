@@ -20,9 +20,6 @@ var Analyzer = &analysis.Analyzer{
 func run(pass *analysis.Pass) (interface{}, error) {
 	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
-	// Go ode will not compile if variables are declared but not used within functions,
-	// so this code only checks for package level declarations in the form: 'var example string' or 'var example = "hello"'
-	// that pass compilation but are not then used within any functions throughout the code.
 	nodeFilter := []ast.Node{
 		(*ast.GenDecl)(nil),
 	}
