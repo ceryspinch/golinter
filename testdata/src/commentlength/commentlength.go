@@ -2,8 +2,10 @@ package commentlength
 
 import "fmt"
 
-// This function is used to print the two words hello world each separated by a space. It uses the fmt package la la la la la la la la la la
+// This comment is acceptable
 func helloWorld() {
-	// Print hello world
+	// This comment is also acceptable
 	fmt.Println("Hello Wolrd")
 }
+
+// TODO: Add unhappy path cases
