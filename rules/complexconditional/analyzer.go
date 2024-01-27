@@ -38,7 +38,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		}
 	})
 
-	// Check for nested if statements
+	// Check for multiple nested if statements
 	inspector.Preorder([]ast.Node{(*ast.IfStmt)(nil)}, func(node ast.Node) {
 		ifStmt := node.(*ast.IfStmt)
 		nestedIfCount := countNestedIfs(ifStmt)
