@@ -1,4 +1,4 @@
-package main
+package exampleCode
 
 import (
 	"fmt"
@@ -12,6 +12,7 @@ var (
 	greeting_message = "hello"
 )
 
+// short comment
 func hello_world() {
 	fmt.Println("Hello World")
 	fmt.Println("Hello World")

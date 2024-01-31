@@ -1,15 +1,19 @@
 package constantnaming
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"strings"
 
+	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
 )
+
+const exampleConstantName = "exampleConstantName"
 
 var Analyzer = &analysis.Analyzer{
 	Name:     "constantnaming",
@@ -38,17 +42,29 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			if !ok {
 				continue
 			}
+
 			for _, ident := range valSpec.Names {
 				constName := ident.Name
+				constPosition := ident.Pos()
+				fullConstPosition := pass.Fset.Position(constPosition)
 
 				isValid, reason := isValidConstantName(constName)
+
 				if !isValid {
 					pass.Reportf(
-						ident.Pos(),
+						constPosition,
 						(color.RedString("Constant %q does not follow Go's naming conventions ", constName))+
 							color.BlueString("as it contains %s. ", reason)+
-							color.GreenString("Instead use CamelCase, for example: exampleConstantName."),
+							color.GreenString("Instead use CamelCase, for example: %q.", exampleConstantName),
 					)
+
+					result := common.LintResult{
+						FilePath: fullConstPosition.Filename,
+						Line:     fullConstPosition.Line,
+						Message:  fmt.Sprintf("Constant %q does not follow Go's naming conventions, as it contains %s. Instead use CamelCase, for example: %q.", constName, reason, exampleConstantName),
+					}
+
+					common.AppendResultToJSON(result, "output.json")
 				}
 			}
 		}

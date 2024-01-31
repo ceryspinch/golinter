@@ -1,9 +1,11 @@
 package unusedconstant
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 
+	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -38,14 +40,26 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 			for _, ident := range valSpec.Names {
 				constName := ident.Name
-				isUsed := checkUnusedConstant(pass, constName, spec.Pos())
+				constPosition := spec.Pos()
+				fullConstPosition := pass.Fset.Position(constPosition)
+
+				isUsed := checkUnusedConstant(pass, constName, constPosition)
+
 				if !isUsed {
 					pass.Reportf(
-						ident.Pos(),
+						constPosition,
 						(color.RedString("Constant %q has been declared but is not used, ", constName))+
 							color.BlueString("which means that is is redundant. ")+
 							color.GreenString("Delete the constant declaration if it is not needed or use it within a function."),
 					)
+
+					result := common.LintResult{
+						FilePath: fullConstPosition.Filename,
+						Line:     fullConstPosition.Line,
+						Message:  fmt.Sprintf("Constant %q has been declared but is not used, which means that is is redundant. Delete the constant declaration if it is not needed or use it within a function.", constName),
+					}
+
+					common.AppendResultToJSON(result, "output.json")
 				}
 			}
 		}
@@ -73,6 +87,5 @@ func checkUnusedConstant(pass *analysis.Pass, constName string, declarationPos t
 			return true
 		}
 	}
-
 	return false
 }

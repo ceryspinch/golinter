@@ -1,6 +1,7 @@
 package unusedfunction
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 
@@ -8,6 +9,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
+
+	"github.com/ceryspinch/golinter/common"
 )
 
 var Analyzer = &analysis.Analyzer{
@@ -27,17 +30,27 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	inspector.Preorder(nodeFilter, func(node ast.Node) {
 		funcDecl := node.(*ast.FuncDecl)
 		funcName := funcDecl.Name.String()
+		funcDeclPosition := node.Pos()
+		fullFuncDeclPosition := pass.Fset.Position(funcDeclPosition)
 
 		// Ignore if main function as this will not need to be called anywhere else
 		if funcName != "main" {
 			isUsed := checkUnusedFunction(pass, funcName, node.Pos())
 			if !isUsed {
 				pass.Reportf(
-					node.Pos(),
+					funcDeclPosition,
 					(color.RedString("Function %q has been declared but is not called anywhere, ", funcName))+
 						color.BlueString("which means that is is redundant. ")+
 						color.GreenString("Delete the function if it is not needed or use call it from within another function."),
 				)
+
+				result := common.LintResult{
+					FilePath: fullFuncDeclPosition.Filename,
+					Line:     fullFuncDeclPosition.Line,
+					Message:  fmt.Sprintf("Function %q has been declared but is not called anywhere, which means that is is redundant. Delete the function if it is not needed or use call it from within another function.", funcName),
+				}
+
+				common.AppendResultToJSON(result, "output.json")
 			}
 		}
 	})

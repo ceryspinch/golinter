@@ -1,9 +1,11 @@
 package repeatedstrings
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 
+	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -18,8 +20,10 @@ var Analyzer = &analysis.Analyzer{
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	// Map to store string literals and their occurrences
-	stringLiterals := make(map[string]int)
+	// Map to store string literals and their number of occurrences
+	stringLiteralsCount := make(map[string]int)
+	// Map to store string literals and the position of their first use
+	stringLiteralsFirstUse := make(map[string]token.Pos)
 
 	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
@@ -28,24 +32,39 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	}
 
 	inspector.Preorder(nodeFilter, func(node ast.Node) {
-		basicLit := node.(*ast.BasicLit)
-		if basicLit.Kind != token.STRING {
+		literal := node.(*ast.BasicLit)
+
+		// Skip if literal is not a string
+		if literal.Kind != token.STRING {
 			return
 		}
 
 		// Get string value and add to the map as a key
-		stringValue := basicLit.Value
-		stringLiterals[stringValue]++
+		stringValue := literal.Value
+		stringLiteralsCount[stringValue]++
+
+		// Store position of string's first use
+		stringLiteralsFirstUse[stringValue] = literal.Pos()
 	})
 
-	for str, count := range stringLiterals {
+	for str, count := range stringLiteralsCount {
 		if count > 1 {
+			position := pass.Fset.Position(stringLiteralsFirstUse[str])
+
 			pass.Reportf(
-				pass.Files[0].Pos(),
+				stringLiteralsFirstUse[str],
 				(color.RedString("String literal %s is repeated %d times, ", str, count))+
 					color.BlueString("which may cause problems during maintenance. ")+
 					color.GreenString("Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance."),
 			)
+
+			result := common.LintResult{
+				FilePath: position.Filename,
+				Line:     position.Line,
+				Message:  fmt.Sprintf("String literal %s is repeated %d times, which may cause problems during maintenance. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.", str, count),
+			}
+
+			common.AppendResultToJSON(result, "output.json")
 		}
 	}
 
