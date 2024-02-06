@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+
+	"github.com/ceryspinch/golinter/common"
 	"github.com/ceryspinch/golinter/rules/commentlength"
 	"github.com/ceryspinch/golinter/rules/complexconditional"
 	"github.com/ceryspinch/golinter/rules/constantnaming"
@@ -18,6 +21,13 @@ import (
 )
 
 func RunLinter() {
+	// Open the JSON file for writing
+	file, err := common.OpenJSONFile("output.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
 	multichecker.Main(
 		functionnaming.Analyzer,
 		variablenaming.Analyzer,
@@ -33,4 +43,13 @@ func RunLinter() {
 		unusedconstant.Analyzer,
 		unusedfunction.Analyzer,
 	)
+
+	err = common.CloseJSONFile("output.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main() {
+	RunLinter()
 }
