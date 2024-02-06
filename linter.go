@@ -49,7 +49,3 @@ func RunLinter() {
 		log.Fatal(err)
 	}
 }
-
-func main() {
-	RunLinter()
-}
