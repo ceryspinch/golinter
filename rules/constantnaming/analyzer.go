@@ -1,12 +1,10 @@
 package constantnaming
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"strings"
 
-	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -46,7 +44,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			for _, ident := range valSpec.Names {
 				constName := ident.Name
 				constPosition := ident.Pos()
-				fullConstPosition := pass.Fset.Position(constPosition)
 
 				isValid, reason := isValidConstantName(constName)
 
@@ -57,14 +54,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 							color.BlueString("as it contains %s. ", reason)+
 							color.GreenString("Instead use CamelCase, for example: %q.", exampleConstantName),
 					)
-
-					result := common.LintResult{
-						FilePath: fullConstPosition.Filename,
-						Line:     fullConstPosition.Line,
-						Message:  fmt.Sprintf("Constant %q does not follow Go's naming conventions, as it contains %s. Instead use CamelCase, for example: %q.", constName, reason, exampleConstantName),
-					}
-
-					common.AppendResultToJSON(result, "output.json")
 				}
 			}
 		}

@@ -1,11 +1,9 @@
 package unusedvariable
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 
-	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -44,7 +42,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			for _, ident := range valSpec.Names {
 				varName := ident.Name
 				varPosition := spec.Pos()
-				fullVarPosition := pass.Fset.Position(varPosition)
 
 				isUsed := checkUnusedVariable(pass, varName, varPosition)
 				if !isUsed {
@@ -54,14 +51,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 							color.BlueString("which means that is is redundant. ")+
 							color.GreenString("Delete the variable declaration if it is not needed or use it within a function."),
 					)
-
-					result := common.LintResult{
-						FilePath: fullVarPosition.Filename,
-						Line:     fullVarPosition.Line,
-						Message:  fmt.Sprintf("Variable %q has been declared but is not used, which means that is is redundant. Delete the variable declaration if it is not needed or use it within a function.", varName),
-					}
-
-					common.AppendResultToJSON(result, "output.json")
 				}
 			}
 		}

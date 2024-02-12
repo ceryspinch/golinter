@@ -1,12 +1,10 @@
 package variablenaming
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"strings"
 
-	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -50,7 +48,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				for _, ident := range valSpec.Names {
 					varName := ident.Name
 					varPosition := ident.Pos()
-					fullVarPosition := pass.Fset.Position(varPosition)
 
 					isValid, reason := isValidVariableName(varName)
 					if !isValid {
@@ -60,14 +57,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 								color.BlueString("as it contains %s. ", reason)+
 								color.GreenString("Instead use CamelCase, for example: %q.", exampleVarName),
 						)
-
-						result := common.LintResult{
-							FilePath: fullVarPosition.Filename,
-							Line:     fullVarPosition.Line,
-							Message:  fmt.Sprintf("Variable %q in variable declaration not follow Go's naming conventions, as it contains %s. Instead use CamelCase, for example: %q.", varName, reason, exampleVarName),
-						}
-
-						common.AppendResultToJSON(result, "output.json")
 					}
 				}
 			}
@@ -78,7 +67,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				if ident, ok := varDecl.(*ast.Ident); ok {
 					varName := ident.Name
 					varPosition := ident.Pos()
-					fullVarPosition := pass.Fset.Position(varPosition)
 
 					isValid, reason := isValidVariableName(varName)
 					if !isValid {
@@ -88,14 +76,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 								color.BlueString("as it contains %s. ", reason)+
 								color.GreenString("Instead use CamelCase, for example: %q.", exampleVarName),
 						)
-
-						result := common.LintResult{
-							FilePath: fullVarPosition.Filename,
-							Line:     fullVarPosition.Line,
-							Message:  fmt.Sprintf("Variable %q in variable assignment not follow Go's naming conventions, as it contains %s. Instead use CamelCase, for example: %q.", varName, reason, exampleVarName),
-						}
-
-						common.AppendResultToJSON(result, "output.json")
 					}
 				}
 			}

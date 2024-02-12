@@ -1,11 +1,9 @@
 package magicnumbers
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 
-	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -34,7 +32,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		}
 
 		value := literal.Value
-		position := pass.Fset.Position(literal.Pos())
 
 		pass.Reportf(
 			literal.Pos(),
@@ -42,14 +39,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				color.BlueString("This can make the code difficult to understand and could lead to errors during maintenance. ")+
 				color.GreenString("Consider defining it as a constant instead."),
 		)
-
-		result := common.LintResult{
-			FilePath: position.Filename,
-			Line:     position.Line,
-			Message:  fmt.Sprintf("Possible magic number detected: %s. This can make the code difficult to understand and could lead to errors during maintenance. Consider defining it as a constant instead.", value),
-		}
-
-		common.AppendResultToJSON(result, "output.json")
 	})
 
 	return nil, nil

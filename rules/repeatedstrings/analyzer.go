@@ -1,11 +1,9 @@
 package repeatedstrings
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 
-	"github.com/ceryspinch/golinter/common"
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -49,22 +47,12 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 	for str, count := range stringLiteralsCount {
 		if count > 1 {
-			position := pass.Fset.Position(stringLiteralsFirstUse[str])
-
 			pass.Reportf(
 				stringLiteralsFirstUse[str],
 				(color.RedString("String literal %s is repeated %d times, ", str, count))+
 					color.BlueString("which may cause problems during maintenance. ")+
 					color.GreenString("Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance."),
 			)
-
-			result := common.LintResult{
-				FilePath: position.Filename,
-				Line:     position.Line,
-				Message:  fmt.Sprintf("String literal %s is repeated %d times, which may cause problems during maintenance. Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.", str, count),
-			}
-
-			common.AppendResultToJSON(result, "output.json")
 		}
 	}
 

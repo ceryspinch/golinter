@@ -1,15 +1,12 @@
 package complexconditional
 
 import (
-	"fmt"
 	"go/ast"
 
 	"github.com/fatih/color"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
-
-	"github.com/ceryspinch/golinter/common"
 )
 
 var Analyzer = &analysis.Analyzer{
@@ -31,7 +28,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		ifStmt := node.(*ast.IfStmt)
 		complexity := calculateComplexity(ifStmt.Cond)
 		ifStmtPos := ifStmt.Pos()
-		fullIfStmtPos := pass.Fset.Position(ifStmtPos)
 
 		if complexity > 3 {
 			pass.Reportf(
@@ -40,14 +36,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					color.BlueString("This can make the code difficult to read and maintain. ")+
 					color.GreenString("Consider refactoring by moving these long conditional checks into separate functions to be called."),
 			)
-
-			result := common.LintResult{
-				FilePath: fullIfStmtPos.Filename,
-				Line:     fullIfStmtPos.Line,
-				Message:  fmt.Sprintf("Complex if statement condition detected with %d boolean expressions. This can make the code difficult to read and maintain. Consider refactoring by moving these long conditional checks into separate functions to be called.", complexity),
-			}
-
-			common.AppendResultToJSON(result, "output.json")
 		}
 	})
 
@@ -56,7 +44,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		ifStmt := node.(*ast.IfStmt)
 		nestedIfCount := countNestedIfs(ifStmt)
 		ifStmtPos := ifStmt.Pos()
-		fullIfStmtPos := pass.Fset.Position(ifStmtPos)
 
 		if nestedIfCount > 1 {
 			pass.Reportf(
@@ -65,14 +52,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					color.BlueString("This can make the code difficult to read, maintain and test. ")+
 					color.GreenString("Consider refactoring by checking for invalid conditions first, simplifying conditions or using a switch statement instead."),
 			)
-
-			result := common.LintResult{
-				FilePath: fullIfStmtPos.Filename,
-				Line:     fullIfStmtPos.Line,
-				Message:  fmt.Sprintf("Multiple, %d, nested if statements detected. This can make the code difficult to read, maintain and test. Consider refactoring by checking for invalid conditions first, simplifying conditions or using a switch statement instead.", nestedIfCount),
-			}
-
-			common.AppendResultToJSON(result, "output.json")
 		}
 	})
 
