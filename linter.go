@@ -1,4 +1,4 @@
-package main
+package linter
 
 import (
 	"github.com/ceryspinch/golinter/rules/commentlength"
