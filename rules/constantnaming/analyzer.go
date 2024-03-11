@@ -52,7 +52,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						constPosition,
 						(color.RedString("Constant %q does not follow Go's naming conventions ", constName))+
 							color.BlueString("as it contains %s. ", reason)+
-							color.GreenString("Instead use CamelCase, for example: %q.", exampleConstantName),
+							color.GreenString("Instead use CamelCase, for example: %q.\n", exampleConstantName),
 					)
 				}
 			}

@@ -47,7 +47,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						constPosition,
 						(color.RedString("Constant %q has been declared but is not used, ", constName))+
 							color.BlueString("which means that is is redundant. ")+
-							color.GreenString("Delete the constant declaration if it is not needed or use it within a function."),
+							color.GreenString("Delete the constant declaration if it is not needed or use it within a function.\n"),
 					)
 				}
 			}

@@ -34,7 +34,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				ifStmtPos,
 				(color.RedString("Complex if statement condition detected with %d boolean expressions. ", complexity))+
 					color.BlueString("This can make the code difficult to read and maintain. ")+
-					color.GreenString("Consider refactoring by moving these long conditional checks into separate functions to be called."),
+					color.GreenString("Consider refactoring by moving these long conditional checks into separate functions to be called.\n"),
 			)
 		}
 	})
@@ -50,7 +50,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				ifStmtPos,
 				(color.RedString("Multiple, %d, nested if statements detected. ", nestedIfCount))+
 					color.BlueString("This can make the code difficult to read, maintain and test. ")+
-					color.GreenString("Consider refactoring by checking for invalid conditions first, simplifying conditions or using a switch statement instead."),
+					color.GreenString("Consider refactoring by checking for invalid conditions first, simplifying conditions or using a switch statement instead.\n"),
 			)
 		}
 	})

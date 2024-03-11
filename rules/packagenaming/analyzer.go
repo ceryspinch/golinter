@@ -36,7 +36,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				packagePosition,
 				(color.RedString("Package name %q does not follow Go's naming conventions ", packageName))+
 					color.BlueString("as it contains an %s. ", reason)+
-					color.GreenString("Package names should be short and only contain lowercase letters."),
+					color.GreenString("Package names should be short and only contain lowercase letters.\n"),
 			)
 		}
 

@@ -40,7 +40,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				funcPosition,
 				(color.RedString("Function %q does not follow Go's naming conventions ", funcName))+
 					color.BlueString("as it contains %s. ", reason)+
-					color.GreenString("Instead use Camel Case, for example %q for private functions or %q for public functions.", examplePrivFuncName, examplePubFuncName),
+					color.GreenString("Instead use Camel Case, for example %q for private functions or %q for public functions.\n", examplePrivFuncName, examplePubFuncName),
 			)
 		}
 	})
