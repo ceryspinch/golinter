@@ -40,8 +40,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			pass.Reportf(
 				commentGroup.Pos(),
 				(color.RedString("Comment spans %d lines, ", commentGroupLength))+
-					color.BlueString("which exceeds the maximum suggested comment length of %d lines. This could mean that the code is too complex. ", maxCommentGroupLength)+
-					color.GreenString("Try to simplify the code so that such a long comment is not needed to understand the code.\n"),
+					color.CyanString("which exceeds the maximum suggested comment length of %d lines. This could mean that the code is too complex. ", maxCommentGroupLength)+
+					color.YellowString("Try to simplify the code so that such a long comment is not needed to understand the code.\n"),
 			)
 		}
 
@@ -60,8 +60,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					pass.Reportf(
 						commentPosition,
 						(color.RedString("Comment contains %d words, ", numWords))+
-							color.BlueString("which exceeds the maximum suggested comment length of %d. This could mean that the code is too complex. ", maxCommentLength)+
-							color.GreenString("Try to simplify the code so that such a long comment is not needed to understand the code.\n"),
+							color.CyanString("which exceeds the maximum suggested comment length of %d. This could mean that the code is too complex. ", maxCommentLength)+
+							color.YellowString("Try to simplify the code so that such a long comment is not needed to understand the code.\n"),
 					)
 				}
 
@@ -70,8 +70,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					pass.Reportf(
 						commentPosition,
 						(color.RedString("Comment contains %d words, ", numWords))+
-							color.BlueString("which is shorter than the minimum suggested comment length of %d. This could mean that the comment is unnecessary and does not add any value.", minCommentLength)+
-							color.GreenString("Revaluate whether the comment is needed by checking if the code explains itself without it.\n"),
+							color.CyanString("which is shorter than the minimum suggested comment length of %d. This could mean that the comment is unnecessary and does not add any value.", minCommentLength)+
+							color.YellowString("Revaluate whether the comment is needed by checking if the code explains itself without it.\n"),
 					)
 				}
 			}

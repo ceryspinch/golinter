@@ -36,8 +36,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				pass.Reportf(
 					funcDeclPosition,
 					(color.RedString("Function %q has been declared but is not called anywhere, ", funcName))+
-						color.BlueString("which means that is is redundant. ")+
-						color.GreenString("Delete the function if it is not needed or use call it from within another function.\n"),
+						color.CyanString("which means that is is redundant. ")+
+						color.YellowString("Delete the function if it is not needed or use call it from within another function.\n"),
 				)
 			}
 		}

@@ -48,8 +48,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					pass.Reportf(
 						varPosition,
 						(color.RedString("Variable %q has been declared but is not used, ", varName))+
-							color.BlueString("which means that is is redundant. ")+
-							color.GreenString("Delete the variable declaration if it is not needed or use it within a function.\n"),
+							color.CyanString("which means that is is redundant. ")+
+							color.YellowString("Delete the variable declaration if it is not needed or use it within a function.\n"),
 					)
 				}
 			}

@@ -38,8 +38,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			pass.Reportf(
 				funcPosition,
 				(color.RedString("Function %q is %d lines long, ", funcName, numLines))+
-					color.BlueString("which may suggest that the function is doing more than one thing or is too complex and could be difficult to read, maintain and test. ")+
-					color.GreenString("Try to split the function up into smaller ones that do one thing each.\n"),
+					color.CyanString("which may suggest that the function is doing more than one thing or is too complex and could be difficult to read, maintain and test. ")+
+					color.YellowString("Try to split the function up into smaller ones that do one thing each.\n"),
 			)
 		}
 	})

@@ -36,8 +36,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		pass.Reportf(
 			literal.Pos(),
 			(color.RedString("Possible magic number detected: %s. ", value))+
-				color.BlueString("This can make the code difficult to understand and could lead to errors during maintenance. ")+
-				color.GreenString("Consider defining it as a constant instead.\n"),
+				color.CyanString("This can make the code difficult to understand and could lead to errors during maintenance. ")+
+				color.YellowString("Consider defining it as a constant instead.\n"),
 		)
 	})
 

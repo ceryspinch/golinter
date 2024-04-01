@@ -50,8 +50,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			pass.Reportf(
 				stringLiteralsFirstUse[str],
 				(color.RedString("String literal %s is repeated %d times, ", str, count))+
-					color.BlueString("which may cause problems during maintenance. ")+
-					color.GreenString("Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.\n"),
+					color.CyanString("which may cause problems during maintenance. ")+
+					color.YellowString("Consider defining it as a constant instead so that if you need to update the value, you do not have to do it for every single instance.\n"),
 			)
 		}
 	}

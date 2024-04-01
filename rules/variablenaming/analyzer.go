@@ -54,8 +54,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						pass.Reportf(
 							varPosition,
 							(color.RedString("Variable %q in variable declaration does not follow Go's naming conventions ", varName))+
-								color.BlueString("as it contains %s. ", reason)+
-								color.GreenString("Instead use CamelCase, for example: %q.\n", exampleVarName),
+								color.CyanString("as it contains %s. ", reason)+
+								color.YellowString("Instead use CamelCase, for example: %q.\n", exampleVarName),
 						)
 					}
 				}
@@ -73,8 +73,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						pass.Reportf(
 							varPosition,
 							(color.RedString("Variable %q in variable assignment does not follow Go's naming conventions ", varName))+
-								color.BlueString("as it contains %s. ", reason)+
-								color.GreenString("Instead use CamelCase, for example: %q.\n", exampleVarName),
+								color.CyanString("as it contains %s. ", reason)+
+								color.YellowString("Instead use CamelCase, for example: %q.\n", exampleVarName),
 						)
 					}
 				}
