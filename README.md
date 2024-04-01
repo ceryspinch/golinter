@@ -31,4 +31,4 @@ Red => explanation of what exactly the issue is
 
 Blue => explanation of why the issue may be problematic
 
-Green => suggestion for improvement
+Yellow => suggestion for improvement
