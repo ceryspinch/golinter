@@ -20,8 +20,9 @@ When running your code, add ` -- filenametolint.go` after `go run main.go ` to s
 
 or add ` -- ./...` to lint all files in the project.
 
-Example command to run linter:
-` go run main.go -- example.go`
+### Example command to run linter:
+
+`go run main.go -- example.go`
 
 ## How to interpret results:
 
