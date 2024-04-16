@@ -33,7 +33,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		endLine := pass.Fset.Position(funcDecl.End()).Line
 		numLines := endLine - startLine + 1
 
-		// TODO: Decide on number to use here that is research/evidence backed
 		if numLines >= 10 {
 			pass.Reportf(
 				funcPosition,
